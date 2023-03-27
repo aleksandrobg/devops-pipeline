@@ -27,4 +27,4 @@ jobs:
         pytest
         
     - name: Test with unittest
-      run: python -m unittest test_calculator.py
+      run: python -m unittest test_calculatora.py
