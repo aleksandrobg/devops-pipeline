@@ -39,6 +39,10 @@ jobs:
         
     - name: Test with unittest
       run: python -m unittest test_calculadora.py
+      
+    - uses: AppThreat/sast-scan-action@master
+      with:
+        type: "python"
 
   deploy-job:
     runs-on: ubuntu-latest
