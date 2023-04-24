@@ -25,18 +25,28 @@ jobs:
 
       - name: Test with Docker
         run: |
-          docker run -v $(pwd):/app -w /app aleksandrobg/calc:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && python -m unittest test_calculadora.py"
+          docker run -v $(pwd):/app -w /app aleksandrobg/calc:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && pytest && python -m unittest test_calculadora.py"
 
       - name: Send report to Telegram bot
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ 5602373510 }}
-          token: ${{ 5951240254:AAE900G0UXRhcNT1qHKuCMwTf7Ohehc3G3U }}
-          message: "Relatorio de testes disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: "Relatorio de teste disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
 
   deploy-job:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - run: echo "Testado e finalizado!"
+      - name: Deploy to production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER }}
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          script: |
+            cd /var/www/myapp
+            git pull
+            docker-compose up -d
+            echo "Deployment completed successfully!"
