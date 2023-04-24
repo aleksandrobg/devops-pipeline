@@ -16,5 +16,5 @@ def test_multiply():
 
 def test_divide():
     c = Calculadora()
-    assert c.divide(6, 3) == 2
+    assert c.divide(6, 2) == 3
     assert c.divide(6, 0) == None
