@@ -1,11 +1,12 @@
-FROM ubuntu:latest
+FROM python:3.9-slim-buster
 
-RUN mkdir /app 
+RUN apt-get update && \
+    apt-get install -y python3-pip && \
+    pip3 install --upgrade pip
+
 WORKDIR /app
+COPY . /app
 
-RUN apt-get update
-RUN apt-get update && apt-get install -y python3
+RUN pip install -r requirements.txt
 
-COPY . ./
-
-CMD ["python", "calculadora.py", "test_calculadora.py"]
+CMD [ "python", "app.py" ]
