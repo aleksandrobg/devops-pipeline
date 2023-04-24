@@ -32,7 +32,7 @@ jobs:
         with:
           to: ${{ 5602373510 }}
           token: ${{ 5951240254:AAE900G0UXRhcNT1qHKuCMwTf7Ohehc3G3U }}
-          message: "Relatorio de teste disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
+          message: "Relatorio de testes disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
 
   deploy-job:
     runs-on: ubuntu-latest
