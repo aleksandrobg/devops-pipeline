@@ -1,4 +1,4 @@
-# pipeline.yml
+#pipeline
 
 name: Python CI
 
@@ -7,46 +7,36 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
   workflow_dispatch:
 
 jobs:
-  build-job:
+  build-and-test-job:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: aleksandrobg/calc:${{ github.sha }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-  test-job:
-    runs-on: ubuntu-latest
+      - name: Test with Docker
+        run: |
+          docker run -v $(pwd):/app -w /app aleksandrobg/devops-pipeline:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && pytest && python -m unittest test_calculadora.py"
 
-    steps:
-    - uses: actions/checkout@v2
-  
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pytest
-        
-    - name: Test with unittest
-      run: python -m unittest test_calculadora.py
-      
-    - uses: AppThreat/sast-scan-action@master
-      with:
-        type: "python"
+      - name: Send report to Telegram bot
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: "Test report available at https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
 
   deploy-job:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - run: echo "Finalizado!"
+      - run: echo "Testado e finalizado!"
