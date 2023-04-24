@@ -27,7 +27,7 @@ jobs:
         run: |
           docker run -v $(pwd):/app -w /app aleksandrobg/calc:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && python -m unittest test_calculadora.py"
 
-      - name: AppThreat/sast-scan-action@master
+      - uses: AppThreat/sast-scan-action@master
         with:
           type: "python"
 
