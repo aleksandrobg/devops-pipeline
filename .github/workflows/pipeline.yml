@@ -25,7 +25,7 @@ jobs:
 
       - name: Test with Docker
         run: |
-          docker run -v $(pwd):/app -w /app aleksandrobg/calc:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && pytest && python -m unittest test_calculadora.py"
+          docker run -v $(pwd):/app -w /app aleksandrobg/calc:${{ github.sha }} /bin/bash -c "pip install -r requirements.txt && python -m unittest test_calculadora.py"
 
       - name: Send report to Telegram bot
         uses: appleboy/telegram-action@master
