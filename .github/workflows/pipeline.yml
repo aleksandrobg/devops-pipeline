@@ -36,7 +36,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: "Relatorio de teste disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
+          message: "Relatorio de testes disponivel em https://github.com/aleksandrobg/devops-pipeline/actions/runs/${{ github.run_id }}"
 
   deploy-job:
     runs-on: ubuntu-latest
